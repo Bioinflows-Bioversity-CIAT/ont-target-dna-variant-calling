@@ -1,0 +1,2 @@
+exp_name	pod5_dir
+test001	./.test/test001

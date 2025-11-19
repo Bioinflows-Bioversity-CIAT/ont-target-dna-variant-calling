@@ -1,0 +1,14 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+description: entries for the sequencing_units sheet
+properties:
+  exp_name:
+    type: string
+    description: Experiment name/identifier
+  run_path:
+    type: string
+    description: Directory location where are stored pod5 files of whole library
+
+required:
+  - exp_name
+  - run_path
+ 
