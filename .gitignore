@@ -10,3 +10,8 @@ workflow/notebooks/.ipynb_checkpoints/**
 **/.Rproj.user/**
 **/.RData
 **/Rplots.pdf
+basecalling/**
+mapping/**
+variant_calling/**
+log/**
+resources/**
