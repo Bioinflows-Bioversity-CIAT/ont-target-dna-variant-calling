@@ -5,7 +5,7 @@ rule minimap:
     output:
         sam = temp(f"{base_dir}/mapping/{{ref}}/{{sample_id}}.sam")
     conda:
-        "anchorwave"
+        "envs/ngs.yml"
     shell:
         """
         minimap2 -ax map-ont -Y {input.ref} {input.fastq} > {output.sam}
@@ -19,7 +19,7 @@ rule sam_bam:
         bam_sort = temp(f"{base_dir}/mapping/{{ref}}/{{sample_id}}_sort.bam"),
         bam_index = temp(f"{base_dir}/mapping/{{ref}}/{{sample_id}}_sort.bam.bai")
     conda:
-        "anchorwave"
+        "envs/ngs.yml"
     shell:
         """
         samtools view -S -F 0x100 -F 0x800 -b {input.sam} > {output.bam} && \
@@ -34,7 +34,7 @@ rule rehead_bam_file:
         bam = f"{base_dir}/mapping/{{ref}}/{{sample_id}}_rehead.bam",
         index = f"{base_dir}/mapping/{{ref}}/{{sample_id}}_rehead.bam.bai"
     conda:
-        "anchorwave"
+        "envs/ngs.yml"
     shell:
         """
         samtools addreplacerg \

@@ -1,0 +1,6 @@
+name: clair3
+channels:
+  - conda-forge
+dependencies:
+  - clair3=1.2.0
+prefix: /home/scruz/.conda/envs/clair3

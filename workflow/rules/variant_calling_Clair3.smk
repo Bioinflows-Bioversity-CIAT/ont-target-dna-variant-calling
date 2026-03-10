@@ -5,7 +5,7 @@ rule variant_calling_per_sample:
     output:
         gvcf = f"{base_dir}/variant_calling/Clair3/{{ref}}/{{sample_id}}/merge_output.gvcf.gz"
     conda:
-        "clair3"
+        "envs/clair3.yml"
     threads:
         5
     shell:
@@ -29,7 +29,7 @@ rule filter_target_roi_clair3:
     output:
         gvcf = f"{base_dir}/variant_calling/Clair3/{{ref}}/{{sample_id}}/merge_output_roi.gvcf.gz"
     conda:
-        "ngs"
+        "envs/ngs.yml"
     threads:
         1
     shell:
