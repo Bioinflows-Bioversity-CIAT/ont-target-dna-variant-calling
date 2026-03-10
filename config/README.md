@@ -1,38 +1,43 @@
 ## Workflow overview
 
-This workflow is a best-practice workflow for `<detailed description>`.
-The workflow is built using [snakemake](https://snakemake.readthedocs.io/en/stable/) and consists of the following steps:
+This workflow is designed to perform variant calling on target ONT-sequenced regions using the GATK HaplotypeCaller and Clair3. The input data for this workflow includes:
+- A reference genomes in FASTA format
+- A text file containing the regions of interest (rois)
+- A text file containing the paths to the input FASTQ files
 
-1. Download genome reference from NCBI
-2. Validate downloaded genome (`python` script)
-3. Simulate short read sequencing data on the fly (`dwgsim`)
-4. Check quality of input read data (`FastQC`)
-5. Collect statistics from tool output (`MultiQC`)
+### Step 1: Reference genome directory
 
-## Running the workflow
+Is requiered create a tab-delimited text file indicating the assembly name (`ref_name`) and the path to the reference genome (`ref_path`), as shown below:
 
-### Input data
+| ref_name | ref_path |
+| --- | --- |
+| hg38 | /path/to/hg38.fa |
 
-This template workflow creates artificial sequencing data in `*.fastq.gz` format.
-It does not contain actual input data.
-The simulated input files are nevertheless created based on a mandatory table linked in the `config.yaml` file (default: `.test/samples.tsv`).
-The sample sheet has the following layout:
+Is important to note that the reference name should be unique and should not contain spaces. You can find an example in `.test/config/reference_units.txt`.
 
-| sample  | condition | replicate | read1                      | read2                      |
-| ------- | --------- | --------- | -------------------------- | -------------------------- |
-| sample1 | wild_type | 1         | sample1.bwa.read1.fastq.gz | sample1.bwa.read2.fastq.gz |
-| sample2 | wild_type | 2         | sample2.bwa.read1.fastq.gz | sample2.bwa.read2.fastq.gz |
+### Step 2: Regions of interest (rois) directory
 
-### Parameters
+You need to create a tab-delimited text file indicating the reference genome where the region is relative to (`ref_name`), the chromosome name (`chrom`), the start position of the region (`pos_i`), the end position of the region (`pos_e`).
+| ref_name | chrom | pos_i | pos_e |
+| --- | --- | --- | --- |
+| hg38 | chr1 | 1000000 | 2000000 |
 
-This table lists all parameters that can be used to run the workflow.
+### Step 3: Fastq files directory
 
-| parameter          | type | details                               | default                        |
-| ------------------ | ---- | ------------------------------------- | ------------------------------ |
-| **samplesheet**    |      |                                       |                                |
-| path               | str  | path to samplesheet, mandatory        | "config/samples.tsv"           |
-| **get_genome**     |      |                                       |                                |
-| ncbi_ftp           | str  | link to a genome on NCBI's FTP server | link to _S. cerevisiae_ genome |
-| **simulate_reads** |      |                                       |                                |
-| read_length        | num  | length of target reads in bp          | 100                            |
-| read_number        | num  | number of total reads to be simulated | 10000                          |
+A tab-delimited text file is required to indicate the sample name (`sample_id`) and the path to the input FASTQ files (`fastq_path`), as shown below:
+| sample_id | fastq_path |
+| --- | --- |
+| sample1 | /path/to/sample1.fastq.gz |
+| sample2 | /path/to/sample2.fastq.gz |
+
+
+### Step 4: Modify config.yaml
+
+In `config/config.yaml`, you can find the parameters that can be modified according to your needs. The parameters include:
+- `base_dir`: The base directory where the workflow will be executed.
+- `sample_units_path`: The path to the text file containing the sample names and paths to the input FASTQ files.
+- `reference_units_path`: The path to the text file containing the reference genome names and paths.
+- `interval_units_path`: The path to the text file containing the regions of interest.
+- `GATK` parameters
+- `Clair3` parameters
+
