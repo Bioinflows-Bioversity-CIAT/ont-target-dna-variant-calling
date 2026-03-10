@@ -24,6 +24,20 @@ rule get_interval_list:
         i_interval = interval_units[(interval_units["ref_name"] == wildcards.ref) & (interval_units["chrom"] == wildcards.chrom)]
         i_interval["locus"].to_csv(output[0], index=False, header=False)
 
+rule get_interval_list_clair3:
+    output:
+        f"{base_dir}/resources/{{ref}}/intervals.list"
+    run:
+        i_interval = interval_units[interval_units["ref_name"] == wildcards.ref]
+        i_interval["locus"].to_csv(output[0], index=False, header=False)
+
+rule get_interval_bed:
+    output:
+        f"{base_dir}/resources/{{ref}}/intervals.bed"
+    run:
+        i_interval = interval_units[interval_units["ref_name"] == wildcards.ref]
+        i_interval[["chrom","pos_i","pos_e"]].to_csv(output[0], sep="\t", index=False, header=False)
+
 rule create_dict:
     input:
         rules.copy_reference.output

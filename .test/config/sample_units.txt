@@ -1,0 +1,3 @@
+sample_id	fastq_path
+BLK01	/opt/bean_fast/projects/SIL/basecalling/SIL_FFAR_2024/MN46155/FLO-MIN114/FAZ11822/f9375f06-04a0-4cc1-a8c1-06431d41cf66/f9375f06-04a0-4cc1-a8c1-06431d41cf66_BLK01.fastq
+BLK02	/opt/bean_fast/projects/SIL/basecalling/SIL_FFAR_2024/MN46155/FLO-MIN114/FAZ11822/f9375f06-04a0-4cc1-a8c1-06431d41cf66/f9375f06-04a0-4cc1-a8c1-06431d41cf66_BLK02.fastq

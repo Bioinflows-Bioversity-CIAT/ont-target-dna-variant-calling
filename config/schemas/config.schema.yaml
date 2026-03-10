@@ -5,5 +5,3 @@ properties:
     type: string
     description: path to sample-sheet TSV file
 
-required:
-  - sequencing_units_path

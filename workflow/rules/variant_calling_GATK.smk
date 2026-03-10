@@ -7,9 +7,9 @@ rule haplotype_caller_gvcf:
         genome_dict = rules.create_dict.output,
         interval_list = rules.get_interval_list.output
     output:
-        gvcf = f"{base_dir}/variant_calling/GATK/{{ref}}/HaplotypeCaller/intervals/{{chrom}}/{{exp_name}}/{{device_id}}/{{flowcell_type}}/{{flowcell_id}}/{{run_id}}/{{sample_id}}_{{chrom}}.g.vcf.gz"
+        gvcf = f"{base_dir}/variant_calling/GATK/{{ref}}/HaplotypeCaller/intervals/{{chrom}}/{{sample_id}}_{{chrom}}.g.vcf.gz"
     log:
-        f"{base_dir}/log/variant_calling/GATK/{{ref}}/HaplotypeCaller/intervals/{{chrom}}/{{exp_name}}/{{device_id}}/{{flowcell_type}}/{{flowcell_id}}/{{run_id}}/{{sample_id}}_{{chrom}}.log"
+        f"{base_dir}/log/variant_calling/GATK/{{ref}}/HaplotypeCaller/intervals/{{chrom}}/{{sample_id}}_{{chrom}}.log"
     params:
         extra=get_GATK_HaplotypeCaller_params(),
         intervals = lambda wildcards, input: input.interval_list
@@ -24,9 +24,9 @@ rule combine_by_sample_gvcfs:
         gvcfs = get_gvcfs_by_sample,
         ref = rules.copy_reference.output,
     output:
-        gvcf = f"{base_dir}/variant_calling/GATK/{{ref}}/CombineGVCFs/{{exp_name}}/{{device_id}}/{{flowcell_type}}/{{flowcell_id}}/{{run_id}}/{{sample_id}}.g.vcf.gz"
+        gvcf = f"{base_dir}/variant_calling/GATK/{{ref}}/CombineGVCFs/{{sample_id}}.g.vcf.gz"
     log:
-        f"{base_dir}/log/variant_calling/GATK/{{ref}}/CombineGVCFs/{{exp_name}}/{{device_id}}/{{flowcell_type}}/{{flowcell_id}}/{{run_id}}/{{sample_id}}.log"
+        f"{base_dir}/log/variant_calling/GATK/{{ref}}/CombineGVCFs/{{sample_id}}.log"
     params:
         extra = get_GATK_CombineGVCFs_params(),  
     resources:
@@ -40,9 +40,9 @@ rule genomics_db_import:
         gvcfs=get_gvcfs_DB,
         interval_list = rules.get_interval_list.output
     output:
-        db = directory(f"{base_dir}/variant_calling/GATK/{{ref}}/DB/{{exp_name}}/{{device_id}}/{{flowcell_type}}/{{flowcell_id}}/{{run_id}}/{{chrom}}")
+        db = directory(f"{base_dir}/variant_calling/GATK/{{ref}}/DB/{{chrom}}")
     log:
-        f"{base_dir}/log/variant_calling/GATK/{{ref}}/DB/{{exp_name}}/{{device_id}}/{{flowcell_type}}/{{flowcell_id}}/{{run_id}}/{{chrom}}.log"
+        f"{base_dir}/log/variant_calling/GATK/{{ref}}/DB/{{chrom}}.log"
     params:
         extra= get_GenomicsDBImport_params(),  # optional
         intervals = lambda wildcards, input: input.interval_list
@@ -58,9 +58,9 @@ rule genotype_gvcfs:
         genomicsdb = rules.genomics_db_import.output.db,
         ref=rules.copy_reference.output,
     output:
-        vcf = f"{base_dir}/variant_calling/GATK/{{ref}}/DB/GenotypeGVCFs/{{exp_name}}/{{device_id}}/{{flowcell_type}}/{{flowcell_id}}/{{run_id}}/{{chrom}}/{{interval_i}}-{{interval_e}}.vcf.gz"
+        vcf = f"{base_dir}/variant_calling/GATK/{{ref}}/DB/GenotypeGVCFs/{{chrom}}/{{interval_i}}-{{interval_e}}.vcf.gz"
     log:
-        f"{base_dir}/log/variant_calling/GATK/{{ref}}/DB/GenotypeGVCFs/{{exp_name}}/{{device_id}}/{{flowcell_type}}/{{flowcell_id}}/{{run_id}}/{{chrom}}/{{interval_i}}-{{interval_e}}.log"
+        f"{base_dir}/log/variant_calling/GATK/{{ref}}/DB/GenotypeGVCFs/{{chrom}}/{{interval_i}}-{{interval_e}}.log"
     params:
         extra=get_GenotypeGVCFs_params(),
         intervals = lambda wildcards: "{chrom}:{interval_i}-{interval_e}".format(chrom = wildcards.chrom,
@@ -77,9 +77,9 @@ rule bcftools_concat:
         calls = get_interval_raw_vcfs,
         fai = f"{base_dir}/resources/{{ref}}/{{ref}}.fasta.fai"
     output:
-        vcf = f"{base_dir}/variant_calling/GATK/{{ref}}/DB/GenotypeGVCFs/{{exp_name}}/{{device_id}}/{{flowcell_type}}/{{flowcell_id}}/{{run_id}}/merged.vcf.gz"
+        vcf = f"{base_dir}/variant_calling/GATK/{{ref}}/DB/GenotypeGVCFs/merged.vcf.gz"
     log:
-        f"{base_dir}/log/variant_calling/GATK/{{ref}}/DB/GenotypeGVCFs/{{exp_name}}/{{device_id}}/{{flowcell_type}}/{{flowcell_id}}/{{run_id}}/merged.log"
+        f"{base_dir}/log/variant_calling/GATK/{{ref}}/DB/GenotypeGVCFs/merged.log"
     params:
         uncompressed_bcf=False,
         extra="-a -Oz",  # optional parameters for bcftools concat (except -o)

@@ -1,2 +1,4 @@
 sequencing_units_path: ".test/config/samples.tsv"
 
+
+demultiplexing: FALSE

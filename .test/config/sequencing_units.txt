@@ -1,0 +1,2 @@
+exp_name	run_path
+test_001	/home/scruz/workflows/ont-target-dna-variant-calling/.test/test_001/results
